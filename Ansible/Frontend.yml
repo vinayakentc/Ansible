@@ -1,0 +1,42 @@
+
+---
+- hosts: Frontend
+  user: ansible
+  become: yes
+  connection: ssh
+
+  tasks:
+
+            - name: update
+              action: yum name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm state=installed
+
+
+            - name: Update
+              become: true
+              shell: sudo yum update -y
+
+
+            - name: Install nginx
+              become: yes
+              yum:
+
+                      name: nginx
+                      state: present
+
+
+
+
+            - name: Copy Files to a remote machine
+              copy:
+
+                      src: /home/ansible/fundoo.conf
+                      dest: /etc/nginx/conf.d/
+            - name: start nginx
+              shell: sudo systemctl start nginx
+
+            - name: stop nginx
+              shell: sudo systemctl stop nginx
+
+            - name: restart nginx
+              shell: sudo systemctl restart nginx
+

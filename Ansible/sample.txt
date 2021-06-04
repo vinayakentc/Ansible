@@ -1,0 +1,80 @@
+
+
+---
+- hosts: Backend
+   user: ansible
+   become: yes
+   connection: ssh
+   tasks:
+   - name: update
+     become: true
+     shell: sudo yum update -y
+
+  - name: Install mysql
+    yum:
+    name: mysql-devel
+    state: present
+
+  - name: Install Git
+    yum:
+    name: git
+    state: present
+
+  - name: Install python3
+    yum:
+    name: python3
+    state: present
+  - name: Install lib
+    yum:
+    name: python3-devel
+    state: present
+  - name: Install pip3
+    yum:
+    name: python3-pip
+    state: present
+  - name: install python3-setuptools
+    yum:
+    name: python3-setuptools
+    state: present
+
+  - name: Install lib
+    yum:
+    name: python3-devel
+    state: present
+
+  - name: Install pip3
+    yum:
+    name: python3-pip
+
+    state: present
+  - name: install python3-setuptools
+
+    yum:
+    name: python3-setuptools
+    state: present
+
+  - name: copy files
+    copy:
+    src: /home/ansible/fundoo.service
+    dest: /etc/systemd/system/
+  - name : clone app from github
+    git:
+    repo: "git@github.com:vinayakentc/Chatapplication.git"
+    dest: /new_chatapp
+    version: master
+  - name: install requirements
+    pip:
+    requirements: /new_chatapp/requirements.txt
+
+  - name: command for daemon-reload
+    become: true
+    shell: sudo systemctl daemon-reload
+
+  - name: commad for start fundoo service
+    become: true
+    shell: sudo systemctl start fundoo
+
+  - name: command for enable fundoo service
+    become: true
+    shell: sudo systemctl enable fundoo
+
